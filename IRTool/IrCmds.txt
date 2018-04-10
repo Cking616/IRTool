@@ -1,0 +1,8 @@
+﻿HOME
+SCAN
+PICK
+PLACE 
+WOB
+config get 
+config set 
+getstations
