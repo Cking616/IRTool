@@ -1,4 +1,6 @@
-﻿HOME
+﻿reset
+passcontroll
+HOME
 SCAN
 PICK
 PLACE 

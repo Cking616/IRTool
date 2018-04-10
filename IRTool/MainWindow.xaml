@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IRTool"
         mc:Ignorable="d"
-        Title="MainWindow" Height="617.11" Width="1037.6"
+        Title="MainWindow" Height="620" Width="1100"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -16,7 +16,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}" WindowStyle="None" WindowStartupLocation="CenterScreen">
     <Grid Margin="0,0,0,25.6">
         <materialDesign:Card Padding="36" Margin="16,16,200,95" VerticalAlignment="Stretch" FontSize="22">
-            <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" Text="欢迎使用新创达IR机器人调试工具!&#x000A;使用说明请按帮助按钮!" FontFamily="FangSong"/>
+            <TextBox x:Name="IrMsgsBox" Margin="1,1,4,5" Text="欢迎使用新创达IR机器人调试工具!&#x000A;使用说明请按帮助按钮!&#x000A;" FontFamily="FangSong" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" IsReadOnly="True" FontSize="16" VerticalContentAlignment="Top" HorizontalContentAlignment="Center" TextDecorations="{x:Null}" HorizontalScrollBarVisibility="Auto" TextAlignment="Justify"/>
         </materialDesign:Card>
 
 
@@ -27,7 +27,7 @@
                 <Button Content="移动" HorizontalAlignment="Right" Margin="0,160,16,0" VerticalAlignment="Top" Width="120" Height="50" FontSize="18"/>
 
                 <Label Content="索引号" HorizontalAlignment="Left" Height="40" Margin="10,4,0,0" VerticalAlignment="Top" FontSize="18" Width="70"/>
-                <local:NumbericTextBox HorizontalAlignment="Left" Margin="80, 4, 0, 0" TextWrapping="Wrap" Text="1"  InputMethod.IsInputMethodEnabled="False" VerticalAlignment="Top" TextAlignment="Center" Height="27" Width="70" FontSize="18" MinValue="0" MaxValue="25"/>
+                <local:NumbericTextBox HorizontalAlignment="Left" Margin="80, 4, 0, 0" TextWrapping="Wrap" Text="1"  InputMethod.IsInputMethodEnabled="False" VerticalAlignment="Top" TextAlignment="Center" Height="27" Width="70" FontSize="18" MinValue="1" MaxValue="25"/>
 
                 <Label Content="出" HorizontalAlignment="Left" Height="40" Margin="36,52,0,0" VerticalAlignment="Top" FontSize="20" Width="40"/>
                 <ToggleButton  Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" Margin="56,50,0,0" VerticalAlignment="Top" Width="80" Height="40" FontSize="22"/>
@@ -37,8 +37,12 @@
                 <ToggleButton  Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" Margin="56,100,0,0" VerticalAlignment="Top" Width="80" Height="40" FontSize="22"/>
                 <Label Content="高" HorizontalAlignment="Left" Height="40" Margin="116,102,0,0" VerticalAlignment="Top" FontSize="20" Width="40"/>
 
-                <Button Content="抓" Margin="16,170,0,0" VerticalAlignment="Top" Height="35" FontSize="18" HorizontalAlignment="Left" Width="70"/>
-                <Button Content="放" Margin="106,170,0,0" VerticalAlignment="Top" Height="35" FontSize="18" HorizontalAlignment="Left" Width="70"/>
+                <Label Content="速度" HorizontalAlignment="Left" Height="40" Margin="21,152,0,0" VerticalAlignment="Top" FontSize="20" Width="50"/>
+                <TextBlock Text="{Binding ElementName=IrSpeedSlider,Path=Value}" Height="30" Margin="70,145,0,0" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" TextAlignment="Center"/>
+                <Slider x:Name ="IrSpeedSlider" HorizontalAlignment="Left" Height="30" Margin="70,165,0,0" VerticalAlignment="Top" Width="100" Maximum="100" Value="50" Delay="300" SmallChange="1" LargeChange="10" IsSnapToTickEnabled="True" Ticks="5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95 100"/>
+
+                <Button Content="抓" Margin="16,200,0,0" VerticalAlignment="Top" Height="35" FontSize="18" HorizontalAlignment="Left" Width="70"/>
+                <Button Content="放" Margin="106,200,0,0" VerticalAlignment="Top" Height="35" FontSize="18" HorizontalAlignment="Left" Width="70"/>
 
                 <Label Content="点位选择" HorizontalAlignment="Left" Height="40" Margin="10,242,0,0" VerticalAlignment="Top" FontSize="18" Width="100"/>
                 <local:AutoCompleteTextBox  x:Name="IrStationTextBox" Height="40" Width="220"  Margin="96, 220,0,0"  HorizontalAlignment="Left" Text="" />
@@ -46,19 +50,19 @@
         </GroupBox>
 
         <Label Content="地址" Height="40" Margin="0,435,325,0" VerticalAlignment="Top" FontSize="20" HorizontalAlignment="Right" Width="50"/>
-        <TextBox Margin="0,425,170,0" TextWrapping="Wrap" Text="192.168.100.33"  InputMethod.IsInputMethodEnabled="False" VerticalAlignment="Top" TextAlignment="Center" Height="40" FontSize="18" HorizontalAlignment="Right" Width="150"/>
-        <Button Content="连接" IsEnabled="True" HorizontalAlignment="Right" Margin="0,420,26,0" VerticalAlignment="Top" Width="120" Height="50" FontSize="18"/>
+        <TextBox x:Name="IrAddress" Margin="0,425,170,0" TextWrapping="Wrap" Text="192.168.100.33"  InputMethod.IsInputMethodEnabled="False" VerticalAlignment="Top" TextAlignment="Center" Height="40" FontSize="18" HorizontalAlignment="Right" Width="150"/>
+        <Button x:Name="IrConnect" Content="连接" IsEnabled="True" HorizontalAlignment="Right" Margin="0,420,26,0" VerticalAlignment="Top" Width="120" Height="50" FontSize="18" Click="IrConnect_Click"/>
 
-        <Button Content="退出" Style="{DynamicResource MaterialDesignRaisedAccentButton}" HorizontalAlignment="Right" Margin="0,500,26,0" VerticalAlignment="Top" Width="120" Height="50" Background="#FFEA0000" FontSize="18"/>
+        <Button x:Name="IrExit" Content="退出" Style="{DynamicResource MaterialDesignRaisedAccentButton}" Click="IrExit_Click" HorizontalAlignment="Right" Margin="0,500,26,0" VerticalAlignment="Top" Width="120" Height="50" Background="#FFEA0000" FontSize="18"/>
         <Button Content="帮助" Style="{DynamicResource MaterialDesignRaisedLightButton}" HorizontalAlignment="Right" Margin="0,500,240,0" VerticalAlignment="Top" Width="120" Height="50" FontSize="18"/>
 
         <Label Content="命令" HorizontalAlignment="Left" Height="30" Margin="36,510,0,0" VerticalAlignment="Top" FontSize="20" Width="50"/>
         <local:AutoCompleteTextBox x:Name="IrSendTextBox" Height="40" Width="350"  Margin="100,465,0,0" Text="" HorizontalAlignment="Left" />
-        <Button Content="发送" IsEnabled="True" Margin="520,500,0,0" VerticalAlignment="Top" Height="50" FontSize="18" HorizontalAlignment="Left" Width="120"/>
+        <Button  x:Name="IrSendCmd" IsEnabled="False" Content="发送"  Margin="520,500,0,0" VerticalAlignment="Top" Height="50" FontSize="18" Click="IrSend_Click" HorizontalAlignment="Left" Width="120"/>
 
         <Label Content="路径" HorizontalAlignment="Left" Margin="38,440,0,0" Height="30" VerticalAlignment="Top" FontSize="18"/>
-        <TextBox x:Name="IrScriptFilePath" Margin="100,425,0,0" TextWrapping="Wrap" Text="" IsReadOnly="True" FontSize="18" HorizontalAlignment="Left" Width="200" Height="40" VerticalAlignment="Top"/>
-        <Button x:Name="IrFilePath" Content="选择文件" HorizontalAlignment="Left" Margin="355,425,0,0" Width="90" Height="40" VerticalAlignment="Top"/>
-        <Button x:Name="IrSendFile" Content="执行文件" HorizontalAlignment="Left" Margin="505,425,0,0" Width="90" Height="40" VerticalAlignment="Top"/>
+        <TextBox x:Name="IrScriptFilePath" Margin="100,425,0,0" TextWrapping="Wrap" Text="" IsReadOnly="True" FontSize="12" HorizontalAlignment="Left" Width="200" Height="40" VerticalAlignment="Top"/>
+        <Button x:Name="IrFilePath" Content="选择文件" HorizontalAlignment="Left" Margin="355,425,0,0" Width="90" Height="40" VerticalAlignment="Top" Click="IrFilePath_Click"/>
+        <Button x:Name="IrSendFile" IsEnabled="False" Content="执行文件" HorizontalAlignment="Left" Margin="505,425,0,0" Width="90" Height="40" VerticalAlignment="Top"/>
     </Grid>
 </Window>
