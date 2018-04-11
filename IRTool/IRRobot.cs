@@ -85,6 +85,7 @@ namespace IRTool
         private EasyClient irClient;
         private string irAddress = "";
         private int irPort = 5000;
+        private int irResetC = 0;
         private bool irNeedReset = false;
         private bool irIsIdle = true;
         private string irLastSend = "";
@@ -153,9 +154,10 @@ namespace IRTool
 
             if (request.Key == "ERROR")
             {
+                irResetC = 5;
                 irNeedReset = true;
-                AppLog.Info("系统", "收到错误返回，自动Reset");
-                SendCmd("RESET\n");
+                AppLog.Info("系统", "收到错误返回，将会自动Reset");
+                // SendCmd("RESET\n");
             }
 
             if (request.Key == "RESET" && request.Body == "END")
@@ -176,7 +178,20 @@ namespace IRTool
 
         private void OnTimer(Object state, EventArgs e)
         {
-            if(irSendBuffer.Count > 0)
+            if (irNeedReset)
+            {
+                if (irResetC > 0)
+                {
+                    irResetC--;
+                }
+                else
+                {
+                    __SendCmd("reset");
+                }
+                return;
+            }
+
+            if (irSendBuffer.Count > 0)
             {
                 string cmd = irSendBuffer.ElementAt(0);
                 if(__SendCmd(cmd))
