@@ -40,8 +40,8 @@ namespace IRTool
     class IRRobotFilter : BeginEndMarkReceiveFilter<StringPackageInfo>
     {
         //开始和结束标记也可以是两个或两个以上的字节
-        private readonly static byte[] BeginMark = new byte[] { (byte)'!' };
-        private readonly static byte[] EndMark = new byte[] { (byte)'\n' };
+        private readonly static byte[] BeginMark = new byte[] { (byte)'>' };
+        private readonly static byte[] EndMark = new byte[] { (byte)'\r' };
         
 
         public IRRobotFilter()
@@ -52,6 +52,12 @@ namespace IRTool
 
         public override StringPackageInfo ResolvePackage(IBufferStream bufferStream)
         {
+            if (bufferStream.Length == 1)
+            {
+                ChangeBeginMark(new byte[] { (byte)'!' });
+                return new StringPackageInfo("Begin", "", null);
+            }
+
             // other code you need implement according yoru protocol details
             byte[] bytes = new byte[bufferStream.Length];
             bufferStream.Read(bytes, 0, bytes.Length);
@@ -73,7 +79,7 @@ namespace IRTool
             }
         }
     }
-
+   
     class IRRobot
     {
         private EasyClient irClient;
@@ -82,6 +88,7 @@ namespace IRTool
         private bool irNeedReset = false;
         private bool irIsIdle = true;
         private string irLastSend = "";
+        private IRRobotFilter irFilter = new IRRobotFilter();
         private Queue<string> irSendBuffer = new Queue<string>();
 
         public bool IsConnected { get => irClient.IsConnected; }
@@ -98,7 +105,7 @@ namespace IRTool
             irClient.Connected += OnConnected;
             irClient.Closed += OnClosed;
             // Initialize the client with the receive filter and request handler
-            irClient.Initialize(new IRRobotFilter(), OnRecieve);
+            irClient.Initialize(irFilter, OnRecieve);
             irClient.ConnectAsync(new IPEndPoint(IPAddress.Parse(irAddress), irPort));
 
             DispatcherTimer timer = new DispatcherTimer
@@ -131,6 +138,7 @@ namespace IRTool
                 send = cmd + "\n";
 
             irClient.Send(Encoding.ASCII.GetBytes(send));
+            irFilter.ChangeBeginMark(new byte[] { (byte)'>' });
             irLastSend = cmd;
             irIsIdle = false;
             return true;
@@ -138,6 +146,11 @@ namespace IRTool
 
         private void OnRecieve(StringPackageInfo request)
         {
+            if (request.Key == "Begin")
+            {
+                return;
+            }
+
             if (request.Key == "ERROR")
             {
                 irNeedReset = true;
