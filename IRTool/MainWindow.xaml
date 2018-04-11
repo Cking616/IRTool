@@ -16,7 +16,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}" WindowStyle="None" WindowStartupLocation="CenterScreen">
     <Grid Margin="0,0,0,25.6">
         <materialDesign:Card Padding="36" Margin="16,16,200,95" VerticalAlignment="Stretch" FontSize="22">
-            <TextBox x:Name="IrMsgsBox" Margin="1,1,4,5" Text="欢迎使用新创达IR机器人调试工具!&#x000A;使用说明请按帮助按钮!&#x000A;" FontFamily="FangSong" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" IsReadOnly="True" FontSize="16" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" TextDecorations="{x:Null}" HorizontalScrollBarVisibility="Auto" TextAlignment="Justify"/>
+            <TextBox x:Name="IrMsgsBox" Margin="1,1,0,0" Text="欢迎使用新创达IR机器人调试工具!&#x000A;使用说明请按帮助按钮!&#x000A;" FontFamily="FangSong" VerticalScrollBarVisibility="Auto" IsReadOnly="True" FontSize="16" VerticalContentAlignment="Top" HorizontalContentAlignment="Center" TextDecorations="{x:Null}" HorizontalScrollBarVisibility="Auto" TextAlignment="Center" UseLayoutRounding="False" Height="286" VerticalAlignment="Top" HorizontalAlignment="Left" Width="583"/>
         </materialDesign:Card>
 
 
