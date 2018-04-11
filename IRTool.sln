@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27428.2011
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRTool", "IRTool\IRTool.csproj", "{C4626B73-4279-460A-AA80-1919DFC3810E}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Installer.vdproj", "{5FC48C86-7947-4882-B08E-768718015DD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{C4626B73-4279-460A-AA80-1919DFC3810E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4626B73-4279-460A-AA80-1919DFC3810E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4626B73-4279-460A-AA80-1919DFC3810E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FC48C86-7947-4882-B08E-768718015DD8}.Debug|Any CPU.ActiveCfg = Debug
+		{5FC48C86-7947-4882-B08E-768718015DD8}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

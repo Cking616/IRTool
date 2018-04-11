@@ -106,7 +106,7 @@ namespace IRTool
             };
             if (dialog.ShowDialog() == true)
             {
-                IrScriptFilePath.Text = dialog.FileName + dialog.SafeFileName;
+                IrScriptFilePath.Text = dialog.FileName;
             }
         }
 
@@ -119,6 +119,7 @@ namespace IRTool
                 String line;
                 while ((line = sr.ReadLine()) != null)
                 {
+                    irRobot.SendCmd(line);
                 }
             }
             else

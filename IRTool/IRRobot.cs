@@ -156,6 +156,8 @@ namespace IRTool
             if(request.Key == irLastSend && request.Body == "END")
             {
                 irIsIdle = true;
+                string msg = request.Key +  "指令执行成功";
+                AppLog.Info("系统", msg);
             }
         }
 
@@ -166,6 +168,8 @@ namespace IRTool
                 string cmd = irSendBuffer.ElementAt(0);
                 if(__SendCmd(cmd))
                 {
+                    string msg = "执行指令" + cmd;
+                    AppLog.Info("系统", msg);
                     irSendBuffer.Dequeue();
                 }
             }
