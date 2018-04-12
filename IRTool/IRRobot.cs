@@ -47,7 +47,7 @@ namespace IRTool
             bufferStream.Read(bytes, 0, bytes.Length);
             string str = System.Text.Encoding.ASCII.GetString(bytes);
             str = str.Replace("\0", string.Empty);
-            AppLog.AddLog("Ir接收:\n" + str);
+            AppLog.AddLog("Ir接收:" + str);
 
             if(str.StartsWith(">"))
             {
@@ -152,11 +152,11 @@ namespace IRTool
             return true;
         }
 
-        public bool MoveStation(string station, bool isLow, bool isPerch, bool islinear, int index, int speed)
+        public bool MoveStation(string station, bool isHigh, bool isInside, bool islinear, int index, int speed)
         {
             string cmd = "move " + station;
 
-            if(isPerch)
+            if(!isInside)
             {
                 cmd += " perch,";
             }
@@ -165,18 +165,18 @@ namespace IRTool
                 cmd += " inside,";
             }
 
-            if(isLow)
+            if(!isHigh)
             {
                 index = -index;
             }
 
             cmd += string.Format(" index = {0:D},", index);
 
-            cmd += string.Format(" speed {0:D},", speed);
+            cmd += string.Format(" speed {0:D}", speed);
 
             if(islinear)
             {
-                cmd += " linear";
+                cmd += ", linear";
             }
 
             irSendBuffer.Enqueue(cmd);
@@ -195,9 +195,12 @@ namespace IRTool
 
         private bool __SendCmd(string cmd)
         {          
-            if (!irIsIdle)
+            if (!irIsIdle )
             {
-                return false;
+                if(!irNeedReset)
+                {
+                    return false;
+                }
             }
 
             string send = cmd;
@@ -205,7 +208,7 @@ namespace IRTool
                 send = cmd + "\n";
 
             irClient.Send(Encoding.ASCII.GetBytes(send));
-            irLastSend = cmd.Split()[0];
+            irLastSend = cmd.Split()[0].ToUpper();
             irIsIdle = false;
             return true;
         }
@@ -219,9 +222,10 @@ namespace IRTool
 
             if (request.Key == "ERROR")
             {
-                irResetC = 5;
+                irResetC = 15;
                 irNeedReset = true;
                 AppLog.Info("系统", "收到错误返回，将会自动Reset");
+                irSendBuffer.Clear();
                 // SendCmd("RESET\n");
             }
 
@@ -251,7 +255,9 @@ namespace IRTool
                 }
                 else
                 {
+                    AppLog.Info("系统", "发送Reset");
                     __SendCmd("reset");
+                    irResetC = 00;
                 }
                 return;
             }

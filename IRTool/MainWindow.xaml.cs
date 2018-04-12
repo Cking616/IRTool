@@ -139,12 +139,12 @@ namespace IRTool
                 return;
             }
 
-            Boolean isLow = IrIsLow.IsChecked.Value;
-            Boolean isPerch = IrIsPerch.IsChecked.Value;
+            Boolean isHigh = IrIsHigh.IsChecked.Value;
+            Boolean isInside = IrIsInside.IsChecked.Value;
             int speed = (int)IrSpeedSlider.Value;
             int index = int.Parse(IrIndex.Text);
 
-            irRobot.MoveStation(station, isLow, isPerch, false, index, speed);
+            irRobot.MoveStation(station, isHigh, isInside, false, index, speed);
         }
 
         public void IrLearnStation_Click(object sender, RoutedEventArgs e)
@@ -157,11 +157,11 @@ namespace IRTool
                 return;
             }
 
-            Boolean isLow = IrIsLow.IsChecked.Value;
-            Boolean isPerch = IrIsPerch.IsChecked.Value;
+            Boolean isHigh = IrIsHigh.IsChecked.Value;
+            Boolean isInside = IrIsInside.IsChecked.Value;
             int index = int.Parse(IrIndex.Text);
 
-            irRobot.LearnStation(station, isLow, isPerch, index);
+            irRobot.LearnStation(station, isHigh, isInside, index);
         }
 
         public void IrExit_Click(object sender, RoutedEventArgs e)
