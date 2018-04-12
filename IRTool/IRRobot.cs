@@ -47,9 +47,9 @@ namespace IRTool
             bufferStream.Read(bytes, 0, bytes.Length);
             string str = System.Text.Encoding.ASCII.GetString(bytes);
             str = str.Replace("\0", string.Empty);
-            AppLog.AddLog("Ir接收:" + str);
+            AppLog.Info("Ir接收", str);
 
-            if(str.StartsWith(">"))
+            if (str.StartsWith(">"))
             {
                 return new StringPackageInfo("BEGIN", "", null);
             }
@@ -91,8 +91,23 @@ namespace IRTool
         }
     }
 
-    class IRRobot
+    class IrRobot
     {
+        struct ScaraPoint
+        {
+            int acutualZPoint;
+            int acutualSPoint;
+            int acutualEPoint;
+            int acutualWPoint;
+            string station;
+            bool isPerch;
+            int index;
+            int closeZPoint;
+            int closeSPoint;
+            int closeEPoint;
+            int closeWPoint;
+        }
+
         private EasyClient irClient;
         private string irAddress = "";
         private int irPort = 5000;
@@ -100,15 +115,15 @@ namespace IRTool
         private bool irNeedReset = false;
         private bool irIsIdle = true;
         private string irLastSend = "";
+
         private IRRobotFilter irFilter = new IRRobotFilter();
         private Queue<string> irSendBuffer = new Queue<string>();
 
         public bool IsConnected { get => irClient.IsConnected; }
-        public bool IrNeedReset { get => irNeedReset;}
+        public bool IrNeedReset { get => irNeedReset; }
         public bool IrIsIdle { get => irIsIdle; }
 
-
-        public IRRobot(string address, int port)
+        public IrRobot(string address, int port)
         {
             irAddress = address;
             irPort = port;
@@ -156,7 +171,7 @@ namespace IRTool
         {
             string cmd = "move " + station;
 
-            if(!isInside)
+            if (!isInside)
             {
                 cmd += " perch,";
             }
@@ -165,7 +180,7 @@ namespace IRTool
                 cmd += " inside,";
             }
 
-            if(!isHigh)
+            if (!isHigh)
             {
                 index = -index;
             }
@@ -174,7 +189,7 @@ namespace IRTool
 
             cmd += string.Format(" speed {0:D}", speed);
 
-            if(islinear)
+            if (islinear)
             {
                 cmd += ", linear";
             }
@@ -183,7 +198,7 @@ namespace IRTool
             return true;
         }
 
-        public bool SendCmd(string cmd)
+        public virtual bool SendCmd(string cmd)
         {
             irSendBuffer.Enqueue(cmd);
             return true;
@@ -194,10 +209,10 @@ namespace IRTool
         private void OnClosed(Object state, EventArgs e) => AppLog.Info("系统", "与Ir控制器连接断开");
 
         private bool __SendCmd(string cmd)
-        {          
-            if (!irIsIdle )
+        {
+            if (!irIsIdle)
             {
-                if(!irNeedReset)
+                if (!irNeedReset)
                 {
                     return false;
                 }
@@ -213,23 +228,25 @@ namespace IRTool
             return true;
         }
 
-        private void OnRecieve(StringPackageInfo request)
+        protected virtual void OnRecieve(StringPackageInfo request)
         {
-            if (request.Key == "BEGIN")
+            string key = request.Key.ToUpper();
+            string body = request.Key.ToUpper();
+            if (key == "BEGIN")
             {
                 return;
             }
 
-            if (request.Key == "ERROR")
+            if (key == "ERROR")
             {
                 irResetC = 15;
                 irNeedReset = true;
                 AppLog.Info("系统", "收到错误返回，将会自动Reset");
                 irSendBuffer.Clear();
-                // SendCmd("RESET\n");
+                return;
             }
 
-            if (request.Key == "RESET" && request.Body == "END")
+            if (key == "RESET" && body == "END")
             {
                 AppLog.Info("系统", "Reset成功");
                 irNeedReset = false;
@@ -237,15 +254,26 @@ namespace IRTool
                 return;
             }
 
-            if(request.Key == irLastSend && request.Body == "END")
+            if (key == "RCP" )
+            {
+                if (body == "END")
+                {
+                    AppLog.Info("系统", "读取坐标成功");
+                    irNeedReset = false;
+                    irIsIdle = true;
+                    return;
+                }
+            }
+
+            if (key == irLastSend && body == "END")
             {
                 irIsIdle = true;
-                string msg = request.Key +  "指令执行成功";
+                string msg = request.Key + "指令执行成功";
                 AppLog.Info("系统", msg);
             }
         }
 
-        private void OnTimer(Object state, EventArgs e)
+        protected virtual void OnTimer(Object state, EventArgs e)
         {
             if (irNeedReset)
             {
@@ -257,7 +285,7 @@ namespace IRTool
                 {
                     AppLog.Info("系统", "发送Reset");
                     __SendCmd("reset");
-                    irResetC = 00;
+                    irResetC = 200;
                 }
                 return;
             }
@@ -265,7 +293,7 @@ namespace IRTool
             if (irSendBuffer.Count > 0)
             {
                 string cmd = irSendBuffer.ElementAt(0);
-                if(__SendCmd(cmd))
+                if (__SendCmd(cmd))
                 {
                     string msg = "执行指令" + cmd;
                     AppLog.Info("系统", msg);

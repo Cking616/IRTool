@@ -24,7 +24,7 @@ namespace IRTool
     {
         const string IRCmdsPath = "./IRCmds.txt";
         const string IRStationPath = "./IRStation.txt";
-        IRRobot irRobot = null;
+        IrRobot irRobot = null;
 
         public MainWindow()
         {
@@ -74,7 +74,7 @@ namespace IRTool
 
         public void IrConnect_Click(object sender, RoutedEventArgs e)
         {
-            irRobot = new IRRobot(IrAddress.Text, 5001);
+            irRobot = new IrRobot(IrAddress.Text, 5001);
         }
 
         public void IrSend_Click(object sender, RoutedEventArgs e)
