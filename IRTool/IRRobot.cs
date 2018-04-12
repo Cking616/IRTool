@@ -37,7 +37,7 @@ namespace IRTool
     class IRRobotFilter : TerminatorReceiveFilter<StringPackageInfo>
     {
         public IRRobotFilter()
-            : base(Encoding.ASCII.GetBytes("\r\n"))
+            : base(Encoding.ASCII.GetBytes("\r\n\0"))
         {
         }
 
@@ -46,6 +46,7 @@ namespace IRTool
             byte[] bytes = new byte[bufferStream.Length];
             bufferStream.Read(bytes, 0, bytes.Length);
             string str = System.Text.Encoding.ASCII.GetString(bytes);
+            str = str.Replace("\0", string.Empty);
             AppLog.AddLog("Ir接收:\n" + str);
 
             if(str.StartsWith(">"))
@@ -55,7 +56,7 @@ namespace IRTool
 
             if (str.StartsWith("!"))
             {
-                string[] strArry = str.Split(' ');
+                string[] strArry = str.Split();
                 string strHead = strArry[1];
                 string[] strParam = strArry.Skip(2).ToArray();
                 string[] strHeads = strHead.Split('-');
@@ -72,7 +73,7 @@ namespace IRTool
             }
             else
             {
-                string[] strArry = str.Split(' ');
+                string[] strArry = str.Split();
                 string strHead = strArry[0];
                 string[] strParam = strArry.Skip(2).ToArray();
                 string[] strHeads = strHead.Split('-');
@@ -127,15 +128,70 @@ namespace IRTool
             timer.IsEnabled = true;
         }
 
-        private void OnConnected(Object state, EventArgs e) => AppLog.Info("系统", "成功与Ir控制器建立连接");
+        public bool LearnStation(string station, bool isLow, bool isPerch, int index)
+        {
+            string cmd = "learn " + station;
 
-        private void OnClosed(Object state, EventArgs e) => AppLog.Info("系统", "与Ir控制器连接断开");
+            if (isPerch)
+            {
+                cmd += " perch,";
+            }
+            else
+            {
+                cmd += " inside,";
+            }
+
+            if (isLow)
+            {
+                index = -index;
+            }
+
+            cmd += string.Format(" index = {0:D},", index);
+
+            irSendBuffer.Enqueue(cmd);
+            return true;
+        }
+
+        public bool MoveStation(string station, bool isLow, bool isPerch, bool islinear, int index, int speed)
+        {
+            string cmd = "move " + station;
+
+            if(isPerch)
+            {
+                cmd += " perch,";
+            }
+            else
+            {
+                cmd += " inside,";
+            }
+
+            if(isLow)
+            {
+                index = -index;
+            }
+
+            cmd += string.Format(" index = {0:D},", index);
+
+            cmd += string.Format(" speed {0:D},", speed);
+
+            if(islinear)
+            {
+                cmd += " linear";
+            }
+
+            irSendBuffer.Enqueue(cmd);
+            return true;
+        }
 
         public bool SendCmd(string cmd)
         {
             irSendBuffer.Enqueue(cmd);
             return true;
         }
+
+        private void OnConnected(Object state, EventArgs e) => AppLog.Info("系统", "成功与Ir控制器建立连接");
+
+        private void OnClosed(Object state, EventArgs e) => AppLog.Info("系统", "与Ir控制器连接断开");
 
         private bool __SendCmd(string cmd)
         {          
@@ -149,7 +205,7 @@ namespace IRTool
                 send = cmd + "\n";
 
             irClient.Send(Encoding.ASCII.GetBytes(send));
-            irLastSend = cmd;
+            irLastSend = cmd.Split()[0];
             irIsIdle = false;
             return true;
         }

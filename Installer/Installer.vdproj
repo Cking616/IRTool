@@ -57,6 +57,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4867B19DC70741DE80E885CE362D4C33"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4CDE479E97D15ACE1EA6C5772C2154D4"
         "OwnerKey" = "8:_5A651DD90EFB44F1A0E5FE551A483A60"
         "MsmSig" = "8:_UNDEFINED"
@@ -89,6 +95,12 @@
         {
         "MsmKey" = "8:_CA429936FFF160013B5D6B00A4C116DF"
         "OwnerKey" = "8:_5A651DD90EFB44F1A0E5FE551A483A60"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F2BB05956C1B40998997F242AE3CECDA"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -212,6 +224,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
         "Release"
@@ -460,6 +480,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4867B19DC70741DE80E885CE362D4C33"
+            {
+            "SourcePath" = "8:..\\IRTool\\IRStation.txt"
+            "TargetName" = "8:IRStation.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_1C1DB5CA60604261A771BDE5A69C853E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4CDE479E97D15ACE1EA6C5772C2154D4"
             {
             "AssemblyRegister" = "3:1"
@@ -604,6 +644,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F2BB05956C1B40998997F242AE3CECDA"
+            {
+            "SourcePath" = "8:..\\IRTool\\IrCmds.txt"
+            "TargetName" = "8:IrCmds.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_1C1DB5CA60604261A771BDE5A69C853E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FD6AD0ABB0204B63917003A1884359C5"
             {
             "SourcePath" = "8:..\\IRTool\\NCDLOGO.png"
@@ -743,7 +803,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:IRTool"
         "ProductCode" = "8:{BB1EEDE2-EDC6-4CF3-8A66-3BBD204A7ED1}"
-        "PackageCode" = "8:{32C915D9-FC28-49E0-A775-10648091A467}"
+        "PackageCode" = "8:{14DCD085-94FF-4950-80A9-AE6F2673043E}"
         "UpgradeCode" = "8:{1C0E8C76-AF7B-4A69-B33F-C5250967D241}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"

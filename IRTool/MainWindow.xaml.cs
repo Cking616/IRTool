@@ -25,6 +25,7 @@ namespace IRTool
         const string IRCmdsPath = "./IRCmds.txt";
         const string IRStationPath = "./IRStation.txt";
         IRRobot irRobot = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -128,6 +129,41 @@ namespace IRTool
             }
         }
 
+        public void IrMoveStation_Click(object sender, RoutedEventArgs e)
+        {
+            string station = IrStationTextBox.Text;
+
+            if(station == "")
+            {
+                MessageBox.Show("请选择Station");
+                return;
+            }
+
+            Boolean isLow = IrIsLow.IsChecked.Value;
+            Boolean isPerch = IrIsPerch.IsChecked.Value;
+            int speed = (int)IrSpeedSlider.Value;
+            int index = int.Parse(IrIndex.Text);
+
+            irRobot.MoveStation(station, isLow, isPerch, false, index, speed);
+        }
+
+        public void IrLearnStation_Click(object sender, RoutedEventArgs e)
+        {
+            string station = IrStationTextBox.Text;
+
+            if (station == "")
+            {
+                MessageBox.Show("请选择Station");
+                return;
+            }
+
+            Boolean isLow = IrIsLow.IsChecked.Value;
+            Boolean isPerch = IrIsPerch.IsChecked.Value;
+            int index = int.Parse(IrIndex.Text);
+
+            irRobot.LearnStation(station, isLow, isPerch, index);
+        }
+
         public void IrExit_Click(object sender, RoutedEventArgs e)
         {
             ExitApp();
@@ -143,6 +179,12 @@ namespace IRTool
                     IrSendCmd.IsEnabled = false;
                     IrConnect.IsEnabled = true;
                     IrSendFile.IsEnabled = false;
+
+                    IrReadStation.IsEnabled = false;
+                    IrLearnStation.IsEnabled = false;
+                    IrMoveStation.IsEnabled = false;
+                    IrGrip.IsEnabled = false;
+                    IrRelease.IsEnabled = false;
                 }
 
                 if (irRobot.IrNeedReset)
@@ -150,6 +192,12 @@ namespace IRTool
                     IrSendCmd.IsEnabled = false;
                     IrConnect.IsEnabled = true;
                     IrSendFile.IsEnabled = false;
+
+                    IrReadStation.IsEnabled = false;
+                    IrLearnStation.IsEnabled = false;
+                    IrMoveStation.IsEnabled = false;
+                    IrGrip.IsEnabled = false;
+                    IrRelease.IsEnabled = false;
                 }
             }
             else
@@ -161,6 +209,12 @@ namespace IRTool
                         IrSendCmd.IsEnabled = true;
                         IrConnect.IsEnabled = false;
                         IrSendFile.IsEnabled = true;
+
+                        IrReadStation.IsEnabled = false;
+                        IrLearnStation.IsEnabled = true;
+                        IrMoveStation.IsEnabled = true;
+                        IrGrip.IsEnabled = true;
+                        IrRelease.IsEnabled = true;
                     }
                 }
                 else
@@ -168,6 +222,12 @@ namespace IRTool
                     IrSendCmd.IsEnabled = false;
                     IrSendFile.IsEnabled = false;
                     IrConnect.IsEnabled = true;
+
+                    IrReadStation.IsEnabled = false;
+                    IrLearnStation.IsEnabled = false;
+                    IrMoveStation.IsEnabled = false;
+                    IrGrip.IsEnabled = false;
+                    IrRelease.IsEnabled = false;
                 }
             }
         }
