@@ -13,17 +13,17 @@ namespace IrTool
 {
     struct IrScaraPoint
     {
-        public int acutualZPoint;
-        public int acutualSPoint;
-        public int acutualEPoint;
-        public int acutualWPoint;
+        public float acutualZPoint;
+        public float acutualSPoint;
+        public float acutualEPoint;
+        public float acutualWPoint;
         public string station;
         public bool isPerch;
-        public int index;
-        public int closeZPoint;
-        public int closeSPoint;
-        public int closeEPoint;
-        public int closeWPoint;
+        public float index;
+        public float closeZPoint;
+        public float closeSPoint;
+        public float closeEPoint;
+        public float closeWPoint;
     }
 
     public static class AppLog
@@ -62,16 +62,12 @@ namespace IrTool
             bufferStream.Read(bytes, 0, bytes.Length);
             string str = System.Text.Encoding.ASCII.GetString(bytes);
             str = str.Replace("\0", string.Empty);
+            str = str.Replace("\r\n", string.Empty);
             AppLog.Info("Ir接收", str);
 
-            if (str.StartsWith(">"))
+            if (str.StartsWith("!") || str.StartsWith(">!"))
             {
-                return new StringPackageInfo("BEGIN", "", null);
-            }
-
-            if (str.StartsWith("!"))
-            {
-                string[] strArry = str.Split();
+                string[] strArry = str.Split(new Char[] { '\t', ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                 string strHead = strArry[1];
                 string[] strParam = strArry.Skip(2).ToArray();
                 string[] strHeads = strHead.Split('-');
@@ -85,6 +81,10 @@ namespace IrTool
                     strHead = strHeads[1];
                     return new StringPackageInfo(strHead, strBody, strParam);
                 }
+            }
+            else if (str.StartsWith(">"))
+            {
+                return new StringPackageInfo("BEGIN", "", null);
             }
             else
             {
@@ -206,6 +206,38 @@ namespace IrTool
             return true;
         }
 
+        public bool Pick(string station, int index)
+        {
+            string cmd = "pick " + station;
+
+            cmd += string.Format(" index = {0:D},", index);
+
+            irSendBuffer.Enqueue(cmd);
+            return true;
+        }
+
+        public bool Place(string station, int index)
+        {
+            string cmd = "place " + station;
+            cmd += string.Format(" index = {0:D},", index);
+            irSendBuffer.Enqueue(cmd);
+            return true;
+        }
+
+        public bool Grip()
+        {
+            string cmd = "Grip 1 ON";
+            irSendBuffer.Enqueue(cmd);
+            return true;
+        }
+
+        public bool Release()
+        {
+            string cmd = "Grip 1 OFF";
+            irSendBuffer.Enqueue(cmd);
+            return true;
+        }
+
         public bool SendCmd(string cmd)
         {
             irSendBuffer.Enqueue(cmd);
@@ -222,19 +254,19 @@ namespace IrTool
         {
             if (param[0] == "ACTUAL-Z")
             {
-                irCurPoint.acutualZPoint = int.Parse(param[1]);
+                irCurPoint.acutualZPoint = float.Parse(param[1]);
             }
             else if (param[0] == "ACTUAL-S")
             {
-                irCurPoint.acutualSPoint = int.Parse(param[1]);
+                irCurPoint.acutualSPoint = float.Parse(param[1]);
             }
             else if (param[0] == "ACTUAL-E")
             {
-                irCurPoint.acutualEPoint = int.Parse(param[1]);
+                irCurPoint.acutualEPoint = float.Parse(param[1]);
             }
             else if (param[0] == "ACTUAL-W")
             {
-                irCurPoint.acutualWPoint = int.Parse(param[1]);
+                irCurPoint.acutualWPoint = float.Parse(param[1]);
             }
             else if (param[0] == "STATION")
             {
@@ -242,23 +274,23 @@ namespace IrTool
             }
             else if (param[0] == "INDEX")
             {
-                irCurPoint.index = int.Parse(param[1]);
+                irCurPoint.index = float.Parse(param[1]);
             }
             else if (param[0] == "CLOSEST-Z")
             {
-                irCurPoint.closeZPoint = int.Parse(param[1]);
+                irCurPoint.closeZPoint = float.Parse(param[1]);
             }
             else if (param[0] == "CLOSEST-S")
             {
-                irCurPoint.closeSPoint = int.Parse(param[1]);
+                irCurPoint.closeSPoint = float.Parse(param[1]);
             }
             else if (param[0] == "CLOSEST-E")
             {
-                irCurPoint.closeEPoint = int.Parse(param[1]);
+                irCurPoint.closeEPoint = float.Parse(param[1]);
             }
             else if (param[0] == "CLOSEST-W")
             {
-                irCurPoint.closeWPoint = int.Parse(param[1]);
+                irCurPoint.closeWPoint = float.Parse(param[1]);
             }
             else if (param[0] == "PERCH")
             {
@@ -322,7 +354,7 @@ namespace IrTool
         private void OnRecieve(StringPackageInfo request)
         {
             string key = request.Key.ToUpper();
-            string body = request.Key.ToUpper();
+            string body = request.Body.ToUpper();
             if (key == "BEGIN")
             {
                 return;
