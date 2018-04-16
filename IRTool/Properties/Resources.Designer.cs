@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace IRTool.Properties {
+namespace IrTool.Properties {
     using System;
     
     

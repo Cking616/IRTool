@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 
-namespace IRTool
+namespace IrTool
 {
     /// <summary>
     /// App.xaml 的交互逻辑

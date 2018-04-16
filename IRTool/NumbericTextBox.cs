@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IRTool
+namespace IrTool
 {
     /// <summary>
     /// 输入数值的文本框
