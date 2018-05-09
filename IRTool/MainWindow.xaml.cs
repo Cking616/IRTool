@@ -164,6 +164,16 @@ namespace IrTool
             irRobot.LearnStation(station, isHigh, isInside, index);
         }
 
+        public void IrGrip_Click(object sender, RoutedEventArgs e)
+        {
+            irRobot.Grip();
+        }
+
+        public void IrRelease_Click(object sender, RoutedEventArgs e)
+        {
+            irRobot.Release();
+        }
+
         public void IrExit_Click(object sender, RoutedEventArgs e)
         {
             ExitApp();

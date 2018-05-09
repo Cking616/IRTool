@@ -41,8 +41,8 @@
                 <TextBlock Text="{Binding ElementName=IrSpeedSlider,Path=Value}" Height="30" Margin="70,145,0,0" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" TextAlignment="Center"/>
                 <Slider x:Name ="IrSpeedSlider" HorizontalAlignment="Left" Height="30" Margin="70,165,0,0" VerticalAlignment="Top" Width="100" Maximum="100" Value="50" Delay="300" SmallChange="1" LargeChange="10" IsSnapToTickEnabled="True" Ticks="5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95 100"/>
 
-                <Button x:Name="IrGrip" Content="抓" Margin="16,200,0,0" VerticalAlignment="Top" Height="35" FontSize="18" HorizontalAlignment="Left" Width="70"/>
-                <Button x:Name="IrRelease" Content="放" Margin="106,200,0,0" VerticalAlignment="Top" Height="35" FontSize="18" HorizontalAlignment="Left" Width="70"/>
+                <Button x:Name="IrGrip" Content="抓" Margin="16,200,0,0" VerticalAlignment="Top" Height="35" FontSize="18" HorizontalAlignment="Left" Width="70" Click="IrGrip_Click"/>
+                <Button x:Name="IrRelease" Content="放" Margin="106,200,0,0" VerticalAlignment="Top" Height="35" FontSize="18" HorizontalAlignment="Left" Width="70" Click="IrRelease_Click"/>
 
                 <Label Content="点位选择" HorizontalAlignment="Left" Height="40" Margin="10,242,0,0" VerticalAlignment="Top" FontSize="18" Width="100"/>
                 <local:AutoCompleteTextBox  x:Name="IrStationTextBox" Height="40" Width="220"  Margin="96, 220,0,0"  HorizontalAlignment="Left" Text="" />

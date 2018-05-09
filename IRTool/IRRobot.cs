@@ -121,8 +121,6 @@ namespace IrTool
         private IrRobotFilter irFilter = new IrRobotFilter();
         private Queue<string> irSendBuffer = new Queue<string>();
 
-
-
         private IrScaraPoint irCurPoint;
         private string irTargetStation;
         private bool irNeedFixPoint;
@@ -436,14 +434,19 @@ namespace IrTool
                 __SendCmd("rcp");
             }
 
-            if (irSendBuffer.Count > 0)
+            lock (irSendBuffer)
             {
-                string cmd = irSendBuffer.ElementAt(0);
-                if (__SendCmd(cmd))
+                if (irSendBuffer.Count > 0)
                 {
-                    string msg = "执行指令" + cmd;
-                    AppLog.Info("系统", msg);
-                    irSendBuffer.Dequeue();
+                    string cmd = irSendBuffer.ElementAt(0);
+                    if (__SendCmd(cmd))
+                    {
+                        string msg = "执行指令" + cmd;
+                        AppLog.Info("系统", msg);
+
+                            irSendBuffer.Dequeue();
+
+                    }
                 }
             }
         }
